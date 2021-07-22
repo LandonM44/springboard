@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 id="allFavs">All your favorites</h2>
+{% for f in favs %}
+    <li id="favList" class="border border-info">
+        <b>{{f.artist}}</b>
+        <p><a id="song-title" href="/favorites/{{ f.id }}">{{f.title}}</a><a href="/favorites/{{ f.id }}/delete"><i id="trash-can" class="fas fa-trash-alt"></i></a></p>
+        
+        <br>
+    </li>
+    <a id="add-song" class="btn btn-info" href="/favorites/{{ favs.id }}/add">add songs</a>
+{% endfor %}
+{% endblock %}

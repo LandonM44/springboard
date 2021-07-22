@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 id="login-signuph1">LYRIX</h2>
+
+<form method="POST" id="valid_forms">
+     {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden' %}
+          {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          {{ field(placeholder=field.label.text, class="form-control") }}
+        {% endfor %}
+
+        <button id="log-sign-btn" class="btn btn-info">Log in</button>
+</form>
+<a class="btn btn-info" id="signup-link" href="/signup">Join</a>
+{% endblock %}
+
+
