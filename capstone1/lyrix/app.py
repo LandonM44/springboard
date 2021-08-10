@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, redirect, flash, g, session, jsonify
-#from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import requests
 
@@ -14,7 +13,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "landon"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-#debug = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -81,7 +79,7 @@ def login():
         else:
             flash("your username or password is wrong", "danger")
 
-    return render_template('/login/login.html', form=form)
+    return render_template('/login.html', form=form)
     
     
 @app.route('/logout')
@@ -118,7 +116,7 @@ def create_account():
         return redirect("/home")
 
     else:
-        return render_template('/login/signup.html', form=form)
+        return render_template('/signup.html', form=form)
 
 
 
