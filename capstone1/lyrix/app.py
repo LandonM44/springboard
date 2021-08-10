@@ -81,7 +81,7 @@ def login():
         else:
             flash("your username or password is wrong", "danger")
 
-    return render_template('login.html', form=form)
+    return render_template('/login/login.html', form=form)
     
     
 @app.route('/logout')
@@ -118,7 +118,7 @@ def create_account():
         return redirect("/home")
 
     else:
-        return render_template('/signup.html', form=form)
+        return render_template('/login/signup.html', form=form)
 
 
 
@@ -176,8 +176,11 @@ def fav_pg():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    userFavs = UserFavorites.query.filter_by(user_id=g.user.id)
+    
     favs = Favorite.query.all()
-    return render_template('favorites.html', favs=favs)
+    
+    return render_template('favorites.html', favs=favs, userFavs=userFavs)
 
 
 @app.route("/favorites/add", methods=["GET", "POST"])
@@ -206,7 +209,7 @@ def add_song():
             db.session.add(new_song)
             db.session.commit()
 
-            userFavs = UserFavorites(user_id=g.user.id, favorite_id=Favorite.id)
+            userFavs = UserFavorites(user_id=g.user.id, favorite_id=new_song.id)
             db.session.add(userFavs)
             db.session.commit()
 
@@ -223,16 +226,19 @@ def show_lyrics(favorite_id):
     if not g.user:
         flash("you do not have access to do this", 'danger')
         return redirect("/")
-
-    fav = Favorite.query.get_or_404(favorite_id)
     
-    resp_lyrics = requests.get(f"{API}/matcher.lyrics.get", params={"apikey": key, "q_track": fav.title, "q_artist": fav.artist})
+    fav = UserFavorites.query.get(favorite_id)
+
+    fav_title = fav.favorites.title
+    fav_artist = fav.favorites.artist
+    
+    resp_lyrics = requests.get(f"{API}/matcher.lyrics.get", params={"apikey": key, "q_track": fav_title, "q_artist": fav_artist})
 
     resp = resp_lyrics.json()
 
     lyrics = resp["message"]["body"]["lyrics"]["lyrics_body"]
         
-    return render_template("favLyrics.html", lyrics=lyrics, fav=fav)
+    return render_template("favLyrics.html", lyrics=lyrics, fav_title=fav_title, fav_artist=fav_artist)
     
     
 @app.route("/favorites/<int:favorite_id>/delete")
@@ -242,10 +248,8 @@ def fav_delete(favorite_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    fav = Favorite.query.get(favorite_id)
-    #if fav.user_id != g.user.id:
-        #flash("You are not authorized to do this", "danger")
-        #return redirect("/")
+    fav = UserFavorites.query.get(favorite_id)
+    
 
     db.session.delete(fav)
     db.session.commit()
