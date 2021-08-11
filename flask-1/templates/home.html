@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Currency Converter Home Page</h1>
+<section class="sect">
+    {% for msg in get_flashed_messages() %}
+        <div>{{ msg }}</div>
+    {% endfor %}
+</section>
+<form class="form" action="/home/converted" method="POST">
+    <p>Convert From:</p>
+        <input type="text" name="convert-start" placeholder="add abbreviation here...">
+    <p>Convert Too:</p>
+        <input type="text" name="convert-too" placeholder="add abbreviation here...">
+    <p>Amount:</p>
+        <input type="number" step=".01" name="amount" placeholder="add numbers here...">
+    <br>
+    <button class="btn">convert</button>
+</form>
+{% endblock %}
