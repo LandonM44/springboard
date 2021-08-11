@@ -1,25 +1,41 @@
-const BASE_URL = "http://localhost:5000/api";
 /** processForm: get data from form and make AJAX call to our API. */
-//alert("im here")
-//async function processForm(evt) {
-   // evt.preventDefault();
 
-    //let name = $("#name").val();
-    //let year = $("#year").val();
-    //let email = $("#email").val();
-  //  let color = $("#color").val();
+function processForm(evt) {
+  evt.preventDefault();
 
-//    JSON.stringify(name)
+  $.ajax({
+    method: "POST",
+    url: "/api/get-lucky-num",
+    contentType: "application/json",
+    data: JSON.stringify({
+      name: $("#name").val(),
+      email: $("#email").val(),
+      year: $("#year").val(),
+      color: $("#color").val(),
+    }),
+    success: handleResponse
+  });
+}
+
+
+function handleResponse(resp) {
+  if ("errors" in resp) {
     
-   // let res = await axios.post("BASE_URL", { name, year, email, color })
-    //console.log(res)
-//}
 
-/** handleResponse: deal with response from our lucky-num API. */
+    for (let err in resp.errors) {
+      $(`#${err}-err`).text(resp.errors[err]);
+    }
+  }
 
-//async function handleResponse(resp) {
-//    const response = await axios.get(`${BASE_URL}/`);
-//}
+  else {
+    
+    let {num, year} = resp;
+    let msg = `Your lucky number is ${num.num} (${num.fact}).
+              Your birth year (${year.year}) fact is ${year.fact}.`;
+
+    $("#lucky-results").text(msg);
+  }
+}
 
 
 $("#lucky-form").on("submit", processForm);
