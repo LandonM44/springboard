@@ -19,22 +19,23 @@
         <div class="container-fluid">
           <div class="navbar-header">
             <a href="/" class="navbar-brand">
-              <img src="/static/images/warbler-logo.png" alt="logo">
-              <span>Warbler</span>
+              <i class="bi bi-arrow-bar-right"></i>
+              
             </a>
           </div>
+          
           <ul class="nav navbar-nav navbar-right">
             {% if request.endpoint != None %}
             <li>
               <form class="navbar-form navbar-right" action="/users">
                 <input name="q" class="form-control" placeholder="Search pictagram" id="search">
-                <button class="btn btn-default">
-                  <span class="fa fa-search"></span>
-                </button>
+                <button class="btn btn-default"><span class="fa fa-search"></span></button>
               </form>
+              
             </li>
             {% endif %}
             {% if not g.user %}
+            
             <li><a href="/signup">Sign up</a></li>
             <li><a href="/login">Log in</a></li>
             {% else %}
@@ -43,6 +44,7 @@
                 <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}">
               </a>
             </li>
+            <li><a href="/feed">feed</a></li>
             <li><a href="/posts/new">New Post</a></li>
             <li><a href="/logout">Log out</a></li>
             {% endif %}
