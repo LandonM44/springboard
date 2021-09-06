@@ -4,8 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g, 
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import os
-from credentials import *
-from forms import LoginForm, SignupForm, UserEditForm, CommentForm, NewPost
+from forms import LoginForm, SignupForm, UserEditForm, CommentForm, NewPost, FeedQuery
 from models import db, connect_db, User, Follows, Likes, Posts
 
 
@@ -22,10 +21,6 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
-#base_url = 'https://api.instagram.com/'
-#hash_media = "/{ig-hashtag-id}/recent_media?user_id={49161504314}&fields={media_url}"
-
-# def by_hashtag(self, hashtag="grinch", count=30, offset=0,)-> dict:
     
 
 @app.before_request
@@ -57,6 +52,31 @@ def hashtag_recents():
 
 
 #home page route#######################################################
+#verifyFp = "verify_kt6pvkl0_jcZ7KsSS_jLb1_43QO_B46v_Ab08OxBzymTB"
+api = TikTokApi.get_instance()
+results = 20
+trending = api.by_trending(count=results, custom_verifyFp="verify_kt6pvkl0_jcZ7KsSS_jLb1_43QO_B46v_Ab08OxBzymTB")
+hashtag = api.by_hashtag(count=results, hashtag="funny", custom_verifyFp="verify_kt6pvkl0_jcZ7KsSS_jLb1_43QO_B46v_Ab08OxBzymTB")
+#discover = api.discover_hashtags(custom_verifyFp="verify_kt6pvkl0_jcZ7KsSS_jLb1_43QO_B46v_Ab08OxBzymTB")
+
+print(hashtag)
+
+@app.route('/feed', methods=["POST", "GET"])
+def hashtag():
+    """shows feed of hashtags"""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    form = FeedQuery()
+
+    if form.validate_on_submit():
+        query = form.query.data
+
+        
+
+    return render_template('posts/newPost.html', form=form)
 
 @app.route('/')
 def homepage():
@@ -70,14 +90,14 @@ def homepage():
                     .order_by(Posts.timestamp.desc())
                     .limit(100)
                     .all())
+        # Prints the id of the tiktok
 
         liked_msg_ids = [msg.id for msg in g.user.likes]
 
-        return render_template('home.html', posts=posts, likes=liked_msg_ids)
+        return render_template('home.html', posts=posts, likes=liked_msg_ids, api = trending)
 
     else:
         return render_template('home-anon.html')
-
 
 #login/logout and signup############################################
 @app.route('/signup', methods=["GET", "POST"])
@@ -168,7 +188,7 @@ def list_users():
 def users_show(user_id):
     """Show user profile."""
 
-    user = User.query.get_or_404(user_id)
+    user = User.query.get(user_id)
     # snagging messages in order from the database;
     # user.messages won't be in order by default
     posts = (Posts
@@ -177,7 +197,7 @@ def users_show(user_id):
                 .order_by(Posts.timestamp.desc())
                 .limit(100)
                 .all())
-    likes = [posts.id for posts in user.likes]
+    likes = [post.id for post in user.likes]
     return render_template('posts/show.html', user=user, posts=posts, likes=likes)
 
 
@@ -362,12 +382,4 @@ def add_like(message_id):
     db.session.commit()
     return redirect("/")
 
-
-
-
-
-
-
-
-
-
+################# hashtag search feed
