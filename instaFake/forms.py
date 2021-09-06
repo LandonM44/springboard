@@ -31,7 +31,6 @@ class UserEditForm(FlaskForm):
     bio = TextAreaField('(Optional) Tell us about yourself')
     password = PasswordField('Password', validators=[Length(min=6)])
 
-
 #form to add or edit comments
 class CommentForm(FlaskForm):
     """Form to add or edit comments"""
@@ -41,6 +40,11 @@ class CommentForm(FlaskForm):
 class NewPost(FlaskForm):
     """form to add a new post"""
 
-    image_url = StringField('add your posts pic', validators=[DataRequired()])
+    image_url = StringField('add your posts image', validators=[DataRequired()])
     text = TextAreaField('(optional) add a message with your post')
+
+class FeedQuery(FlaskForm):
+    """form to add a new post"""
+
+    query = StringField("search for a #hashtag feed", validators=[DataRequired()])
 
