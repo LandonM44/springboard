@@ -52,6 +52,9 @@ class User(db.Model):
 
     post = db.relationship('Posts')
 
+    #followers = db.relationship("follows", backref="users")
+    #following = db.relationship("follows", backref="")
+
     followers = db.relationship("User", secondary="follows", primaryjoin=(Follows.user_being_followed_id == id), secondaryjoin=(Follows.user_following_id == id))
 
     following = db.relationship("User", secondary="follows", primaryjoin=(Follows.user_following_id == id), secondaryjoin=(Follows.user_being_followed_id == id))
@@ -78,7 +81,7 @@ class User(db.Model):
     @classmethod
     def authenticate(cls, email, password):
 
-        user = cls.query.filter_by(email=email ).first()
+        user = cls.query.filter_by(email=email).first()
 
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
@@ -118,7 +121,7 @@ class Posts(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
 
-    user = db.relationship('User')
+    user = db.relationship("User")
 
 
 def connect_db(app):
