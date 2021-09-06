@@ -46,3 +46,17 @@ body {
     bottom: 0;
     background: rgba(255, 255, 255, 0.3);
   }
+
+.timeline-image {
+  border-radius: 48px;
+  height: 48px;
+  width: 48px;
+  margin-top: 2px;
+}
+
+.post-image {
+  border-radius: 5px;
+  height: 1050px;
+  width: 576px;
+  margin-top: 2px;
+}
