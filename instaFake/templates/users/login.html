@@ -2,19 +2,22 @@
 
 {% block content %}
 
-<h2 id="login-signuph1">LYRIX</h2>
 
-<form method="POST" id="valid_forms">
-     {{ form.hidden_tag() }}
 
-        {% for field in form if field.widget.input_type != 'hidden' %}
-          {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
+<form id="login-form" method="POST">
+  <h2 id="picta"><i id="logo-login" class="bi bi-camera-reels"></i>Pictagram</h1>
+      {{ form.hidden_tag() }}
+
+          {% for field in form if field.widget.input_type != 'hidden' %}
+            {% for error in field.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            {{ field(placeholder=field.label.text, class="form-control") }}
           {% endfor %}
-          {{ field(placeholder=field.label.text, class="form-control") }}
-        {% endfor %}
-
-        <button id="log-sign-btn" class="btn btn-info">Log in</button>
-</form>
-<a class="btn btn-info" id="signup-link" href="/signup">Join</a>
+          <button id="login-btn" class="btn btn-light">Login</button>
+  </form>
+<div id="signup-div">
+  <button class="btn btn-light" id="signup-btn" href="/signup">Join</button>
+  <p id="join-p">come join us at picta!</p>
+</div>
 {% endblock %}
