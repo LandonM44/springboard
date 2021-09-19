@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<h2 id="login-signuph1">Join LYRIX today!</h2>
-    <form id="valid_forms" method="POST" id="user_form">
+<h1 id="header-h1">Join LYRIX today!</h1>
+    <form id="signup-form" method="POST" id="user_form">
       {{ form.hidden_tag() }}
 
       {% for field in form if field.widget.input_type != 'hidden' %}
@@ -13,7 +13,6 @@
         {{ field(placeholder=field.label.text, class="form-control") }}
       {% endfor %}
 
-      <button id="log-sign-btn" class="btn btn-info">Sign up</button>
+      <button id="signup-btn" class="btn btn-light">Sign up</button>
     </form>
-    <a id="login-link" class="btn btn-info" href="/login">Login</a>
 {% endblock %}
