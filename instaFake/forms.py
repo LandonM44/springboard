@@ -27,9 +27,10 @@ class UserEditForm(FlaskForm):
 
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
-    image_url = StringField('(Optional) Image URL')
+    profile_img = StringField('(Optional) Image URL')
     bio = TextAreaField('(Optional) Tell us about yourself')
     password = PasswordField('Password', validators=[Length(min=6)])
+    location = StringField("(optional) share your location")
 
 #form to add or edit comments
 class CommentForm(FlaskForm):
