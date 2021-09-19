@@ -1,13 +1,15 @@
 import os
 from TikTokApi import TikTokApi
 from flask import Flask, render_template, request, flash, redirect, session, g, abort
+import requests
+from newsapi import NewsApiClient
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import os
 from forms import LoginForm, SignupForm, UserEditForm, CommentForm, NewPost, FeedQuery
 from models import db, connect_db, User, Follows, Likes, Posts
 
-
+newsapi = NewsApiClient(api_key='b4181a4ffbd44b9cb5d1441b94c80ee2')
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
@@ -56,10 +58,8 @@ def hashtag_recents():
 api = TikTokApi.get_instance()
 results = 20
 trending = api.by_trending(count=results, custom_verifyFp="verify_kt6pvkl0_jcZ7KsSS_jLb1_43QO_B46v_Ab08OxBzymTB")
-hashtag = api.by_hashtag(count=results, hashtag="funny", custom_verifyFp="verify_kt6pvkl0_jcZ7KsSS_jLb1_43QO_B46v_Ab08OxBzymTB")
-#discover = api.discover_hashtags(custom_verifyFp="verify_kt6pvkl0_jcZ7KsSS_jLb1_43QO_B46v_Ab08OxBzymTB")
 
-print(hashtag)
+#print(hashtag)
 
 @app.route('/feed', methods=["POST", "GET"])
 def hashtag():
@@ -69,14 +69,26 @@ def hashtag():
         flash("Access unauthorized.", "danger")
         return redirect("/")
     
-    form = FeedQuery()
+    #resp = requests.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=b4181a4ffbd44b9cb5d1441b94c80ee2')
+    headlines = newsapi.get_top_headlines()
+    articles = headlines["articles"]
 
-    if form.validate_on_submit():
-        query = form.query.data
+    desc= []
+    news = []
+    img = []
+    url = []
+
+    for res in range(len(articles)):
+        my_articles = articles[res]
+        news.append(my_articles['title'])
+        desc.append(my_articles['description'])
+        img.append(my_articles['urlToImage'])
+        url.append(my_articles['url'])
+
+        art_list = zip(news, desc, img, url)
+    return render_template('feed.html', resp=art_list)
 
         
-
-    return render_template('posts/newPost.html', form=form)
 
 @app.route('/')
 def homepage():
@@ -94,7 +106,7 @@ def homepage():
 
         liked_msg_ids = [msg.id for msg in g.user.likes]
 
-        return render_template('home.html', posts=posts, likes=liked_msg_ids, api = trending)
+        return render_template('home.html', posts=posts, likes=liked_msg_ids, api=trending)
 
     else:
         return render_template('home-anon.html')
@@ -276,17 +288,14 @@ def profile():
     form = UserEditForm(obj=user)
 
     if form.validate_on_submit():
-            if User.authenticate(user.username, form.password.data):
-                user.username = form.username.data
-                user.email = form.email.data
-                user.image_url = form.image_url.data or "/static/images/default-pic.png"
-                user.header_image_url = form.header_image_url.data or "/static/images/warbler-hero.jpg"
-                user.bio = form.bio.data
+        user.username = form.username.data
+        user.email = form.email.data
+        user.profile_img = form.profile_img.data or "/static/images/warbler-hero.jpg"
+        user.bio = form.bio.data
+        user.location = form.location.data
 
-                db.session.commit()
-                return redirect(f"/users/{user.id}")
-
-            flash("Wrong password, please try again.", 'danger')
+        db.session.commit()
+        return redirect(f"/users/{user.id}")
 
     return render_template('users/edit.html', form=form, user_id=user.id)
 
@@ -311,7 +320,7 @@ def delete_user():
 #Posts######################################################################
 
 @app.route('/posts/new', methods=["GET", "POST"])
-def messages_add():
+def posts_add():
     """Add a message:
     Show form if GET. If valid, update message and redirect to user page.
     """
@@ -334,22 +343,22 @@ def messages_add():
 
 
 @app.route('/posts/<int:post_id>', methods=["GET"])
-def messages_show(message_id):
+def posts_show(post_id):
     """Show a message."""
 
-    msg = Posts.query.get_or_404(message_id)
+    msg = Posts.query.get_or_404(post_id)
     return render_template('posts/show.html', message=msg)
 
 
 @app.route('/posts/<int:message_id>/delete', methods=["POST"])
-def messages_destroy(message_id):
+def posts_destroy(post_id):
     """Delete a message."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    msg = Posts.query.get(message_id)
+    msg = Posts.query.get(post_id)
     if msg.user_id != g.user.id:
         flash("you do not have access to do this.", "danger")
         return redirect("/")
@@ -361,14 +370,14 @@ def messages_destroy(message_id):
 
 
 @app.route('/posts/<int:message_id>/like', methods=['POST'])
-def add_like(message_id):
+def add_like(post_id):
     """like warbles by logged in user"""
 
     if not g.user:
         flash("you do not have access to do this", 'danger')
         return redirect("/")
 
-    liked_message = Posts.query.get_or_404(message_id)
+    liked_message = Posts.query.get_or_404(post_id)
     if liked_message.user_id == g.user.id:
         return abort(403)
 
