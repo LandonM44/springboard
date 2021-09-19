@@ -1,18 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'posts/detail.html' %}
 
 {% block content %}
 
-<form id="valid_forms" method="POST">
-    {{ form.hidden_tag() }}
-
-    {% for field in form if field.widget.input_type != 'hidden' %}
-      {% for error in field.errors %}
-        <span class="text-danger">{{ error }}</span>
-      {% endfor %}
-      {{ field(placeholder=field.label.text, class="form-control") }}
+<div class="article-page">
+    {% for new, des, i, u in resp %}
+        <div id="ea-news-page">
+            <h3>{{ new }}<h3/>
+            <img id="news-img" src="{{i}}" alt="story image">
+            <h5><a href="{{u}}">{{ des }}</a></h5>
+        </div>
     {% endfor %}
-
-    
-  </form>
+</div>
 
 {% endblock %}
+
