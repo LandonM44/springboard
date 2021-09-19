@@ -6,7 +6,9 @@
 body {
     background-color: #e6ecf0;
 }
-
+#home-aside {
+  width: 320px;
+}
 .home-hero {
     height: 100vh;
     display: flex;
@@ -44,7 +46,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.3);
+    
   }
 
 .timeline-image {
@@ -59,4 +61,256 @@ body {
   height: 1050px;
   width: 576px;
   margin-top: 2px;
+}
+
+#body {
+  background-color: hsl(57, 76%, 89%);
+}
+
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,700,900,400italic,700italic,900italic);
+
+*,
+:before,
+:after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #fdf9fd;
+    color: #011a32;
+    font: 16px/1.25 'Raleway', sans-serif;
+    text-align: center;
+}
+
+#wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80em;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    float: left;
+    justify-content: center;
+    min-height: 155px;
+    padding: 1em;
+
+}
+
+#picta {
+    animation: text-shadow 1.5s ease-in-out infinite;
+    font-size: 5em;
+    font-weight: 900;
+    line-height: 1;
+    padding: 58px;
+}
+
+#picta:hover {
+    animation-play-state: paused;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+@keyframes text-shadow {
+    0% {  
+        transform: translateY(0);
+        text-shadow: 
+            0 0 0 #0c2ffb, 
+            0 0 0 #2cfcfd, 
+            0 0 0 #fb203b, 
+            0 0 0 #fefc4b;
+    }
+
+    20% {  
+        transform: translateY(-1em);
+        text-shadow: 
+            0 0.125em 0 #0c2ffb, 
+            0 0.25em 0 #2cfcfd, 
+            0 -0.125em 0 #fb203b, 
+            0 -0.25em 0 #fefc4b;
+    }
+
+    40% {  
+        transform: translateY(0.5em);
+        text-shadow: 
+            0 -0.0625em 0 #0c2ffb, 
+            0 -0.125em 0 #2cfcfd, 
+            0 0.0625em 0 #fb203b, 
+            0 0.125em 0 #fefc4b;
+    }
+    
+   60% {
+        transform: translateY(-0.25em);
+        text-shadow: 
+            0 0.03125em 0 #0c2ffb, 
+            0 0.0625em 0 #2cfcfd, 
+            0 -0.03125em 0 #fb203b, 
+            0 -0.0625em 0 #fefc4b;
+    }
+
+    80% {  
+        transform: translateY(0);
+        text-shadow: 
+            0 0 0 #0c2ffb, 
+            0 0 0 #2cfcfd, 
+            0 0 0 #fb203b, 
+            0 0 0 #fefc4b;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+}
+
+#pictaNav {
+  background-color: #ce401d;
+}
+
+.navLi {
+  color: white
+}
+.nav-a {
+  color: white;
+  text-decoration: none;
+  margin: 17px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 22px;
+}
+
+#logo {
+  margin: 10px;
+}
+#navH2 {
+  margin: 7px;
+  color: white;
+}
+#login-form {
+  padding: 50px;
+}
+#login-btn {
+  margin: 100px;
+  text-shadow: none;
+  position: relative;
+  z-index: 1;
+  width: 125px;
+}
+#login-btn:hover {
+  background-color: rgb(241, 148, 93);
+  border-radius: 50%;
+  width: 85px;
+}
+#signup-btn {
+  margin: 100px;
+  position: relative;
+  z-index: 1;
+  width: 125px;
+  top: 50%;
+}
+#signup-btn:hover {
+  background-color: rgb(241, 148, 93);
+  border-radius: 50%;
+  width: 85px;
+}
+#login-form {
+  position: relative;
+  top: 100px;
+}
+#news-img {
+  height: 1000px;
+  width: 1000px;
+  border-radius: 10%;
+}
+#ea-news-page {
+  margin-top: 150px;
+  margin-bottom: 150px;
+}
+#join-p {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 22px;
+  margin-bottom: 50px;
+}
+#profile-avatar {
+  width: 100px;
+}
+#profile-card-img {
+  width: 320px;
+  height: 350px;
+}
+#card-wrapper {
+  width: 1300px;
+  margin-top: 25px;
+  text-align: center;
+  position: relative;
+}
+#bio-div {
+  width: 320px;
+  text-align: center;
+  margin-left: 500px;
+}
+#bio-div-wrapper {
+  width: 1320px;
+  text-align: center;
+}
+#profile-card-ul {
+  text-align: center;
+  margin-left: 530px;
+}
+.user-li {
+  margin: 18px;
+}
+#user-card {
+  width: 1000px;
+  align-items: center;
+  margin: 20px;
+}
+.user-info-p {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+#posts-wrapper {
+  margin: 200px;
+}
+#post-li {
+  margin: 20px;
+}
+#post-text {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 20px;
+}
+#profile-img {
+  width: 280px;
+}
+#signup-form {
+  margin-top: 150px;
+}
+#header-h1 {
+  margin-top: 350px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+#delete-edit-btns {
+  margin: 40px;
+  position: relative;
+  z-index: 1;
+  width: 125px;
+  top: 50%;
+  position: static;
+  background-color: white;
+  border: none;
+}
+#delete-edit-btns:hover {
+  background-color: rgb(241, 148, 93);
+  border: none;
+}
+#posts {
+  width: 650px;
+  background-color: #011a32;
 }
