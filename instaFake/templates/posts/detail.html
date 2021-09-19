@@ -2,71 +2,50 @@
 
 {% block content %}
 
-<div id="warbler-hero" class="full-width" style="background-image: url('{{ user.header_image_url }}');"></div>
-<img src="{{ user.image_url }}" alt="Image for {{ user.username }}" id="profile-avatar">
-<div class="row full-width">
-  <div class="container">
-    <div class="row justify-content-end">
-      <div class="col-9">
-        <ul class="user-stats nav nav-pills">
-          <li class="stat">
-            <p class="small">Messages</p>
-            <h4>
-              <a href="/users/{{ user.id }}">{{ user.messages | length }}</a>
-            </h4>
-          </li>
-          <li class="stat">
-            <p class="small">Following</p>
-            <h4>
-              <a href="/users/{{ user.id }}/following">{{ user.following | length }}</a>
-            </h4>
-          </li>
-          <li class="stat">
-            <p class="small">Followers</p>
-            <h4>
-              <a href="/users/{{ user.id }}/followers">{{ user.followers | length }}</a>
-            </h4>
-          </li>
-          <li class="stat">
-            <p class="small">Likes</p>
-            <h4>
-              <a href="/users/{{user.id}}/likes">{{ user.likes|length }}</a>
-            </h4>
-          </li>
-          <div class="ml-auto">
-            {% if g.user.id == user.id %}
-            <a href="/users/profile" class="btn btn-outline-secondary">Edit Profile</a>
-            <form method="POST" action="/users/delete" class="form-inline">
-              <button class="btn btn-outline-danger ml-2">Delete Profile</button>
-            </form>
-            {% elif g.user %}
-            {% if g.user.is_following(user) %}
-            <form method="POST" action="/users/stop-following/{{ user.id }}">
-              <button class="btn btn-primary">Unfollow</button>
-            </form>
-            {% else %}
-            <form method="POST" action="/users/follow/{{ user.id }}">
-              <button class="btn btn-outline-primary">Follow</button>
-            </form>
-            {% endif %}
-            {% endif %}
-          </div>
-        </ul>
+<div id="user-card" class="card user-card">
+  <div id="card-wrapper">
+    <a href="/users/{{ g.user.id }}" class="card-link">
+      <img id="profile-card-img" 
+            src="{{ g.user.profile_img }}"
+            alt="Image for {{ g.user.username }}"
+            class="card-image">
+      <p>@{{ g.user.username }}</p>
+    </a>
+    <a href="/users/profile"><button  id="delete-edit-btns" class="btn btn-light" >Edit</button></a>
+    <a href="/users/delete"><button id="delete-edit-btns" class="btn btn-light" >Delete</button></a>
+    <ul id="profile-card-ul" class="user-stats nav nav-pills">
+      <li class="user-li">
+        <p class="user-info-p">Posts</p>
+        <h4>
+          <a href="/users/{{ g.user.id }}">{{ g.user.posts | length }}</a>
+        </h4>
+      </li>
+      <li class="user-li">
+        <p class="user-info-p">Following</p>
+        <h4>
+          <a href="/users/{{ g.user.id }}/following">{{ g.user.following | length }}</a>
+        </h4>
+      </li>
+      <li class="user-li">
+        <p class="user-info-p">Followers</p>
+        <h4>
+          <a href="/users/{{ g.user.id }}/followers">{{ g.user.followers | length }}</a>
+        </h4>
+      </li>
+    </ul>
+    <div id="bio-div-wrapper" class="row">
+      <div id="bio-div" class="col-sm-3">
+        <h4 id="sidebar-username">@{{ user.username }}</h4>
+        <p>Bio: {{ user.bio }}</p>
+        <p class="user-location"><span class="fa fa-map-marker"></span>Location: {{ user.location }}</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-3">
-    <h4 id="sidebar-username">@{{ user.username }}</h4>
-    <p>{{ user.bio }}</p>
-    <p class="user-location"><span class="fa fa-map-marker"></span> {{ user.location }}</p>
-  </div>
-
   {% block user_details %}
   {% endblock %}
 
-</div>
-
 {% endblock %}
+
+
