@@ -1,0 +1,33 @@
+{% extends 'posts/detail.html' %}
+
+
+{% block user_details %}
+  <div id="posts-wrapper" class="col-sm-6">
+    <ul class="list-group" id="posts">
+
+      {% for post in posts %}
+
+        <li id="post-li" class="list-group-item">
+          <a href="/posts/{{ post.id }}" class="message-link"/>
+
+          <a href="/users/{{ user.id }}">
+            <img src="{{ user.profile_img }}" alt="user image" class="timeline-image">
+          </a>
+
+          <div class="post-area">
+            <a href="/users/{{ user.id }}">@{{ user.username }}</a>
+            <span class="text-muted">{{ post.timestamp.strftime('%d %B %Y') }}</span>
+            <img src="{{ post.image_url}}" class="post-image">
+            <p id="post-text">{{ post.text }}</p>
+          </div>
+          
+        </li>
+
+      {% endfor %}
+
+    </ul>
+  </div>
+{% endblock %}
+
+
+
