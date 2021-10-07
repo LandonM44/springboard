@@ -210,7 +210,7 @@ def users_show(user_id):
                 .limit(100)
                 .all())
     likes = [post.id for post in user.likes]
-    return render_template('posts/show.html', user=user, posts=posts, likes=likes)
+    return render_template('users/show.html', user=user, posts=posts, likes=likes)
 
 
 @app.route('/users/<int:user_id>/following')
@@ -346,8 +346,9 @@ def posts_add():
 def posts_show(post_id):
     """Show a message."""
 
-    msg = Posts.query.get_or_404(post_id)
-    return render_template('posts/show.html', message=msg)
+    posts = Posts.query.get_or_404(post_id)
+    
+    return render_template('posts/show.html', posts=posts)
 
 
 @app.route('/posts/<int:message_id>/delete', methods=["POST"])
@@ -369,7 +370,7 @@ def posts_destroy(post_id):
     return redirect(f"/users/{g.user.id}")
 
 
-@app.route('/posts/<int:message_id>/like', methods=['POST'])
+@app.route('/posts/<int:post_id>/like', methods=['POST'])
 def add_like(post_id):
     """like warbles by logged in user"""
 
@@ -392,3 +393,16 @@ def add_like(post_id):
     return redirect("/")
 
 ################# hashtag search feed
+
+
+
+
+
+
+
+
+
+
+
+
+
