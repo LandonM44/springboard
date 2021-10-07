@@ -1,33 +1,43 @@
-{% extends 'posts/detail.html' %}
+{% extends 'base.html' %}
 
+{% block content %}
 
-{% block user_details %}
-  <div class="col-sm-6">
-    <ul class="list-group" id="messages">
-
-      {% for post in posts %}
-
+  <div class="bg"></div>
+  <div class="row justify-content-center">
+    <div id="posts-wrapper" class="col-md-6">
+      <ul class="list-group no-hover" id="posts">
         <li class="list-group-item">
-          <a href="/posts/{{ post.id }}" class="message-link"/>
-
-          <a href="/users/{{ user.id }}">
-            <img src="{{ user.profile_img }}" alt="user image" class="timeline-image">
+          <a href="{{ url_for('users_show', user_id=posts.user.id) }}">
+            <img src="{{ posts.user.profile_img }}" alt="" class="timeline-image">
           </a>
-
+          <img src="{{ posts.image_url}}" class="post-image">
           <div class="post-area">
-            <a href="/users/{{ user.id }}">@{{ user.username }}</a>
-            <span class="text-muted">{{ post.timestamp.strftime('%d %B %Y') }}</span>
-            <img src="{{ post.image_url}}" class="post-image">
-            <p>{{ post.text }}</p>
+            <div class="post-heading">
+              <a href="/users/{{ posts.user.id }}">@{{ posts.user.username }}</a>
+              {% if g.user %}
+                {% if g.user.id == posts.user.id %}
+                  <form method="POST"
+                        action="/posts/{{ posts.id }}/delete">
+                    <button class="btn btn-outline-danger">Delete</button>
+                  </form>
+                {% elif g.user.is_following(posts.user) %}
+                  <form method="POST"
+                        action="/users/stop-following/{{ posts.user.id }}">
+                    <button class="btn btn-primary">Unfollow</button>
+                  </form>
+                {% else %}
+                  <form method="POST" action="/users/follow/{{ posts.user.id }}">
+                    <button class="btn btn-outline-primary btn-sm">Follow</button>
+                  </form>
+                {% endif %}
+              {% endif %}
+            </div>
+            <p class="single-message">{{ posts.text }}</p>
+            <span class="text-muted">{{ posts.timestamp.strftime('%d %B %Y') }}</span>
           </div>
-          
         </li>
-
-      {% endfor %}
-
-    </ul>
+      </ul>
+    </div>
   </div>
+
 {% endblock %}
-
-
-
