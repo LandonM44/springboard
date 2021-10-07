@@ -10,26 +10,27 @@
             <img src="{{ g.user.header_image_url }}" alt="" class="card-hero">
           </div>
           <a href="/users/{{ g.user.id }}" class="card-link">
-            <img src="{{ g.user.image_url }}"
+            <img src="{{ g.user.profile_img }}"
                  alt="Image for {{ g.user.username }}"
-                 class="card-image">
+                 id="profile-img">
+
             <p>@{{ g.user.username }}</p>
           </a>
           <ul class="user-stats nav nav-pills">
-            <li class="stat">
-              <p class="small">Posts</p>
+            <li class="user-li">
+              <p class="user-info-p">Posts</p>
               <h4>
                 <a href="/users/{{ g.user.id }}">{{ g.user.posts | length }}</a>
               </h4>
             </li>
-            <li class="stat">
-              <p class="small">Following</p>
+            <li class="user-li">
+              <p class="user-info-p">Following</p>
               <h4>
                 <a href="/users/{{ g.user.id }}/following">{{ g.user.following | length }}</a>
               </h4>
             </li>
-            <li class="stat">
-              <p class="small">Followers</p>
+            <li class="user-li">
+              <p class="user-info-p">Followers</p>
               <h4>
                 <a href="/users/{{ g.user.id }}/followers">{{ g.user.followers | length }}</a>
               </h4>
@@ -43,14 +44,15 @@
       <ul class="list-group" id="posts">
         {% for p in posts %}
           <li class="list-group-item">
-            <img src="/messages/{{ p.id  }}" class="message-link"/>
+            <img src="/posts/{{ p.id  }}" class="message-link"/>
             <a href="/users/{{ p.user.id }}">
-              <img src="{{ p.user.image_url }}" alt="" class="timeline-image">
+              <img src="{{ p.user.profile_img }}" alt="" class="timeline-image">
             </a>
             <div class="post-area">
-               <a href="{{ p.image_url }}">
+               <a href="{{ p.image_url }}"></a>
                <a href="/users/{{ p.user.id }}">@{{ p.user.username }}</a>
                <span class="text-muted">{{ p.timestamp.strftime('%d %B %Y') }}</span>
+               <img src="{{ p.image_url}}" alt="error loading image" class="post-image">
                <p>{{ p.text }}</p>
             </div>
             <form method="POST" action="/posts/{{ p.id }}/like" class="posts-like">
@@ -64,8 +66,25 @@
             </form>
           </li>
         {% endfor %}
+        <div class="col-lg-6 col-md-8 col-sm-12">
+          <ul class="list-group" id="posts">
+            {% for a in api %}
+            <li class="list-group-item">
+               <h3>{{ a.desc }}</h3>
+              <video width={{a.video.width}} height={{a.video.height}} poster="{{a.cover}}" controls src={{a.video.playAddr}} type={{a.video.formats}}/></video>
+              {% endfor %}
+            </li>
+           
+          </ul>
+          
+        </div>
+
+        
+     
       </ul>
+      
     </div>
 
   </div>
 {% endblock %}
+<!---->
